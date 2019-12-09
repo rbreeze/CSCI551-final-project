@@ -6,8 +6,6 @@ from random import randint
 import numpy
 import sys
 
-seed(1)
-
 comm = MPI.COMM_WORLD
 size = comm.Get_size()
 rank = comm.Get_rank()
