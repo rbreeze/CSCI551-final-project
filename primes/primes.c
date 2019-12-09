@@ -32,12 +32,14 @@ int main(int argc, char *argv[]) {
   MPI_Scatter(send, count, MPI_INT, recv, count, MPI_INT, 0, MPI_COMM_WORLD);
 
   // each node now processes its share of the numbers
-  res = count; //here: count how many prime numbers are contained in the array
-  for(i = count; (--i) >= 0; ) { //j: test all odd numbers 1<j<sqrt(j)|1
-    for(j = ((int)(sqrt(recv[i]))|1); j>1; j -= 2) {
-      if((recv[i] % j) == 0) { // if a number can be divided by j
-        res--; // it cannot be a prime number, reduce number of primes
-        break; } // break inner loop to test next number
+  res = 0; //here: count how many prime numbers are contained in the array
+  for(i = 0; i < count; i++) { //j: test all odd numbers 1<j<sqrt(j)|1
+    for(j = 2; j < recv[i]; j++) {
+      if ((recv[i] % j) == 0) { // if a number can be divided by j
+        break; 
+      } else {
+        res++;
+      }
     }
   }
 
