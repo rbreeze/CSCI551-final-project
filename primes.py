@@ -29,7 +29,7 @@ for i in range(2, k+1):
         for j in range(i*i, k+1, i):
             not_prime.append(j)
 
-
+comm.Barrier()
 t1_start = process_time() 
 
 # Find the number of primes between k and k**2 by
@@ -58,15 +58,11 @@ for i in range(0,p):
     totalb = totalb + len(countb)
 total = comm.reduce(totalb,MPI.BOR,0)
 
+comm.Barrier()
 t1_stop = process_time() 
 
 if (id == 0):
-    print ("Total number of processors: ",p)
-print ("Processor ",id, "is calculating:", S_k2)
-print ("Processor ",id, "is calculating this many primes :",processor_num_primes)
-print("Processor ",id,"has the following range:",(int(k+(id)*b),int(k+(id+1)*b)))
-if (id == 0):
     print("The total number of primes found between",2,"and",k*k,"by the n-"
     "loop is:",total+original_num_primes)
-print('')
-print("Elapsed Time: " + str(t1_stop-t1_start))
+    print('')
+    print("Elapsed Time: " + str(t1_stop-t1_start))
