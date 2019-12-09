@@ -45,7 +45,10 @@ int main(int argc, char *argv[]) {
         }
       }
     }
-    if (prime) res++;
+    if (prime) {
+      printf("%d\n", num); 
+      res++;
+    }
   }
 
   printf("Process %d discovered %d primes in the numbers from %d to %d.\n", rank, res, recv[0], recv[count-1]);
