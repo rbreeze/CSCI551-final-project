@@ -41,5 +41,5 @@ local_sum = numpy.sum(numpy.array(local_sum)).astype('float64')
 comm.Reduce(local_sum, global_sum, op=MPI.SUM, root=0)
 
 if (rank == 0): 
-  print("Total sum = " + str(global_sum) + ", avg = " + str(global_sum / (world_size * num_elements_per_proc)))
+  print("Total sum = " + str(global_sum) + ", avg = " + str(global_sum / (size * num_elements_per_proc)))
 
