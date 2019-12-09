@@ -4,6 +4,7 @@ import numpy as np
 import platform
 import sys
 from mpi4py import MPI
+import math
 from time import process_time 
 
 comm = MPI.COMM_WORLD
@@ -13,7 +14,7 @@ id = comm.Get_rank( )
 p = comm.Get_size( )
 
 # Find the primes between 2 and k. Initialize k.
-k=int(sys.argv[1])
+k=int(math.sqrt(sys.argv[1]))
 # Define a list S_k of the primes between 2 and k
 S_k=[]
 # Define a list to store numbers that aren't prime between 2 and k.
