@@ -21,8 +21,8 @@ int main(int argc, char *argv[]) {
   MPI_Comm_rank(MPI_COMM_WORLD, &rank); // get own rank/ID
   MPI_Comm_size(MPI_COMM_WORLD, &size); // get total number of processes
 
-  if(rank == 0) { //generate data (i.e., the first DATA_SIZE natural numbers) if root
-    for(i = DATA_SIZE; (--i)>=0; ) { send[i] = (i + 1); }
+  if (rank == 0) { //generate data (i.e., the first DATA_SIZE natural numbers) if root
+    for(i = 0; i < DATA_SIZE; i++) { send[i] = i + 1; }
   }
 
   double start = MPI_Wtime();
