@@ -7,6 +7,10 @@ import sys
 
 seed(1)
 
+comm = MPI.COMM_WORLD
+size = comm.Get_size()
+rank = comm.Get_rank()
+
 if size<2:
   print("Need more than 1 process")
   quit()
@@ -21,10 +25,6 @@ if (sys.argc != 2):
   print("Usage: avg num_elements_per_proc\n")
 
 num_elements_per_proc = atoi(sys.argv[1])
-
-comm = MPI.COMM_WORLD
-size = comm.Get_size()
-rank = comm.Get_rank()
 
 rand_nums = create_rand_nums(num_elements_per_proc)
 

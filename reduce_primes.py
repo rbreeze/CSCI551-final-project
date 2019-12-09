@@ -6,6 +6,10 @@ import sys
 import numpy
 from time import process_time 
 
+comm = MPI.COMM_WORLD
+size = comm.Get_size()
+rank = comm.Get_rank()
+
 if size<2:
   print("Need more than 1 process")
   quit()
@@ -14,10 +18,6 @@ DATA_SIZE = 2048
 
 send = numpy.zeros(DATA_SIZE, dtype=int)
 recv = numpy.zeros(DATA_SIZE, dtype=int)
-
-comm = MPI.COMM_WORLD
-size = comm.Get_size()
-rank = comm.Get_rank()
 
 t1_start = process_time() 
 
