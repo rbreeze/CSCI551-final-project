@@ -1,65 +1,59 @@
-# Source: https://stackoverflow.com/questions/55112272/applying-reduce-and-broadcast-in-mpi
+# adapted from Thomas Weise
+# https://github.com/thomasWeise/distributedComputingExamples/blob/master/mpi/reducePrimes.c
 
-import numpy as np
-import platform
-import sys
 from mpi4py import MPI
+import sys
+import numpy
 import math
 from time import process_time 
 
 comm = MPI.COMM_WORLD
-id = comm.Get_rank()
-p = comm.Get_size()
+size = comm.Get_size()
+rank = comm.Get_rank()
 
-# Find the primes between 2 and k. Initialize k.
-k=int(math.sqrt(int(sys.argv[1])))
-# Define a list S_k of the primes between 2 and k
-S_k=[]
-# Define a list to store numbers that aren't prime between 2 and k.
-not_prime = []
-# Define a list S_k2 of the primes between k and k**2
-S_k2=[]
+if size<2:
+  print("Need more than 1 process")
+  quit()
 
+DATA_SIZE = 2048
 
-# Count the number of primes from 2 to k
-for i in range(2, k+1):
-    if i not in not_prime:
-        S_k.append(i)
-        for j in range(i*i, k+1, i):
-            not_prime.append(j)
+send = numpy.zeros(DATA_SIZE, dtype=int)
+recv = numpy.zeros(DATA_SIZE, dtype=int)
 
-comm.Barrier()
 t1_start = process_time() 
 
-# Find the number of primes between k and k**2 by
-# pararllelizing the n-loop.
-b=(k**2-k)/p
-for n in range(int(k+(id)*b),int(k+(id+1)*b)):
-    counter = 0
-    for i in range(len(S_k)):
-        if (n % S_k[i]) == 0:
-            break
-        else:
-            counter = counter + 1
-    if (counter==len(S_k)):
-        S_k2.append(n)
+if (rank == 0): 
+  for i in range(DATA_SIZE-1, 0, -1): 
+    send[i] = (i + 1)
 
-# Compute the amount of primes in the two lists.
-processor_num_primes = len(S_k2)
-original_num_primes = len(S_k)
+comm.Scatter(send, recv, root=0)
+count = int(DATA_SIZE / size)
 
-# Broadcast the amount of primes and calculate the unions
-# of sets of integers.
-countb = 0
-totalb = 0
-for i in range(0,p):
-    countb = comm.bcast(S_k2,i)
-    totalb = totalb + len(countb)
-total = comm.reduce(totalb,MPI.BOR,0)
+res = 0; # here: count how many prime numbers are contained in the array
+low = recv[0]; 
+high = recv[count-1]
+if (low % 2 == 0) low += 1
 
-comm.Barrier()
+for i in range(low, high, 2):
+  flag = 0
+
+  for j in range(2, i/2):
+    if (i % j == 0):
+      flag = 1
+      break
+
+  if (flag == 0): 
+    res++
+
 t1_stop = process_time() 
 
-if (id == 0):
-    print("Primes found between",2,"and",k*k,"is:",total+original_num_primes)
-    print("Elapsed Time: " + str(t1_stop-t1_start))
+print("Process " + str(rank) + " discovered " + str(res) + " primes in the numbers from " + str(recv[0]) + " to " + str(recv[count-1]) + ".")
+
+res = numpy.sum(numpy.array(res)).astype('float64')
+recv = numpy.sum(numpy.array(recv)).astype('float64')
+
+comm.Reduce(res, recv, op=MPI.SUM, root=0)
+
+if(rank == 0): 
+  print("The total number of primes in the first " + str(count*size) + " natural numbers is " + str(recv[0]) + ".")
+  print("Time: " + str(t1_stop-t1_start))
