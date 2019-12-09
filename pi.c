@@ -1,44 +1,55 @@
-// Author: Thomas Weise
-// https://raw.githubusercontent.com/thomasWeise/distributedComputingExamples/master/mpi/piGatherScatter.c
+// source: https://github.com/kiwenlau/MPI_PI/blob/master/Trapezoid1/mpi_pi.c
 
-#include <mpi.h>    // import MPI header
-#include <stdio.h>  // needed for printf
-#include <stdlib.h> // for rand and RAND_MAX
-#include <string.h> // for memset
-#include <time.h>   // for srand(time(NULL));
+// This program is to caculate PI using MPI
+// The algorithm is based on Trapezium rule. If f(x)=4*(1-x^2)^(1/2), then PI is the intergral of f(x) from 0 to 1
 
-int main(int argc, char **argv) {
-  int           i, size, rank;     double     x, y;
-  long long int *data, worker[2];  MPI_Status status;
+#include <stdio.h>
+#include<math.h>
+#include <mpi.h>
 
-  MPI_Init(&argc, &argv);                           //initialize MPI
-  MPI_Comm_size(MPI_COMM_WORLD, &size);             //get the number of processes in the global communicator
-  MPI_Comm_rank(MPI_COMM_WORLD, &rank);             //get the rank of this process within the global communicator
+#define N 1E7
+#define d 1E-7
+#define d2 1E-14
 
-  if(rank != 0) {
-    worker[0] = worker[1] = 0LL;                    //the local worker array
-    srand(time(NULL));
-    for(worker[0] = 1; worker[0] < (rank * 100000000LL); worker[0]++) { //make 100 000 000 samples
-      x = (rand() / ((double)RAND_MAX));            //random x-coordinate in [0,1]
-      y = (rand() / ((double)RAND_MAX));            //random y-coordinate in [0,1]
-      if( ((x*x) + (y*y)) <= 1.0 ) {                //did it fall into the inner circle?
-        worker[1]++;                                //yes, it did - increase counter
-      }
+int main (int argc, char* argv[])
+{
+    int rank, size, error, i;
+    double pi=0.0, begin=0.0, end=0.0, result=0.0, sum=0.0, x2;
+    
+    error=MPI_Init (&argc, &argv);
+    
+    //Get process ID
+    MPI_Comm_rank (MPI_COMM_WORLD, &rank);
+    
+    //Get processes Number
+    MPI_Comm_size (MPI_COMM_WORLD, &size);
+    
+    //Synchronize all processes and get the begin time
+    MPI_Barrier(MPI_COMM_WORLD);
+    begin = MPI_Wtime();
+    
+    //Each process caculates a part of the sum
+    for (i=rank; i<N; i+=size)
+    {
+        x2=d2*i*i;
+        result+=sqrt(1-x2);
     }
-  }
-
-  data = (long long int*)malloc(sizeof(long long int) * size * 2); //allocate data (ok, waste some memory in the workers)
-  memset(data, 0, (sizeof(data[0]) * 2 * size));    //clear the data buffer
-  MPI_Gather(worker, 2, MPI_LONG_LONG_INT, data, 2, MPI_LONG_LONG_INT, 0, MPI_COMM_WORLD);  //gather results
-
-  if(rank == 0) {                                   //root now evaluates results
-    for(i = size; (--i) > 0; ) {                    //receive data from the workers
-      data[0] += data[2*i];                         //get the received sample size (number of points)
-      data[1] += data[2*i+1];                       //get the number of samples (points) inside the unit circle
-      printf("worker %d sends estimate %G (based on %lld samples), total estimate now is %G (based on %lld samples).\n", i,
-            ((4.0 * data[2*i + 1]) / data[2*i]), data[2*i], ((4.0 * data[1]) / data[0]), data[0]);
-      }
-  }
-  MPI_Finalize();                                   //finish the MPI stuff
-  return 0;
+    
+    //Sum up all results
+    MPI_Reduce(&result, &sum, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+    
+    //Synchronize all processes and get the end time
+    MPI_Barrier(MPI_COMM_WORLD);
+    end = MPI_Wtime();
+    
+     //Caculate and print PI
+    if (rank==0)
+    {
+        pi=4*d*sum;
+        printf("np=%2d;    Time=%fs;    PI=%lf\n", size, end-begin, pi);
+    }
+    
+    error=MPI_Finalize();
+    
+    return 0;
 }
