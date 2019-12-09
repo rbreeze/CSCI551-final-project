@@ -50,8 +50,8 @@ t1_stop = process_time()
 
 print("Process " + str(rank) + " discovered " + str(res) + " primes in the numbers from " + str(recv[0]) + " to " + str(recv[count-1]) + ".")
 
-res = numpy.sum(numpy.array(res)).astype('float64')
-recv = numpy.sum(numpy.array(recv)).astype('float64')
+res = numpy.sum(numpy.array(res)).astype('int')
+recv = numpy.sum(numpy.array(recv)).astype('int')
 
 comm.Reduce(res, recv, op=MPI.SUM, root=0)
 
