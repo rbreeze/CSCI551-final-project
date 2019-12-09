@@ -4,6 +4,7 @@
 from mpi4py import MPI
 import sys
 import numpy
+import math
 from time import process_time 
 
 comm = MPI.COMM_WORLD
