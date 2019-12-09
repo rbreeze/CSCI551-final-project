@@ -7,14 +7,19 @@
 #include<math.h>
 #include <mpi.h>
 
-#define N 1E7
 #define d 1E-7
 #define d2 1E-14
 
 int main (int argc, char* argv[])
 {
+    if (argc != 2) {
+        fprintf(stderr, "Usage: pi num_iterations\n");
+        exit(1);
+    }
+
     int rank, size, error, i;
     double pi=0.0, begin=0.0, end=0.0, result=0.0, sum=0.0, x2;
+    int N = atoi(argv[1]);
     
     error=MPI_Init (&argc, &argv);
     
@@ -46,7 +51,8 @@ int main (int argc, char* argv[])
     if (rank==0)
     {
         pi=4*d*sum;
-        printf("np=%2d;    Time=%fs;    PI=%lf\n", size, end-begin, pi);
+        printf("PI=%lf\n", size, end-begin, pi);
+        printf("Elapsed Time: %f\n");
     }
     
     error=MPI_Finalize();
