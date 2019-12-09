@@ -52,8 +52,8 @@ int main (int argc, char* argv[])
     if (rank==0)
     {
         pi=4*d*sum;
-        printf("PI=%lf\n", size, end-begin, pi);
-        printf("Elapsed Time: %f\n");
+        printf("PI=%lf\n", pi);
+        printf("Elapsed Time: %f\n",  end-begin);
     }
     
     error=MPI_Finalize();
