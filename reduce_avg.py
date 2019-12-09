@@ -2,7 +2,7 @@
 
 from mpi4py import MPI
 from random import seed
-from random import random
+from random import randint
 import sys
 
 seed(1)
@@ -18,7 +18,7 @@ if size<2:
 def create_rand_nums(num_elements): 
   rand_nums = []
   for i in range(num_elements):
-    rand_nums.append(random.randint(0, 100))
+    rand_nums.append(randint(0, 100))
   return rand_nums
 
 if (len(sys.argv) != 2): 

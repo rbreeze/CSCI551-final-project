@@ -19,7 +19,7 @@ float *create_rand_nums(int num_elements) {
   assert(rand_nums != NULL);
   int i;
   for (i = 0; i < num_elements; i++) {
-    rand_nums[i] = (rand() / (float)RAND_MAX);
+    rand_nums[i] = (int) (rand() % 100);
   }
   return rand_nums;
 }
