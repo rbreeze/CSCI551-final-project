@@ -44,7 +44,7 @@ for i in range(low, high, 2):
       break
 
   if (flag == 0): 
-    res++
+    res += 1
 
 t1_stop = process_time() 
 
