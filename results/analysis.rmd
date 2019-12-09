@@ -1,0 +1,34 @@
+```{r}
+library(dplyr)
+library(knitr)
+library(ggplot2)
+
+
+analyzeRuntimes <- function(filepath) {
+  rundata <- read.csv(filepath, header=FALSE)
+  
+  rundata$lang<-as.factor(rundata$V1)
+  rundata$runtime<-rundata$V3
+  rundata$inputsize<-rundata$V2
+  rundata <- select (rundata,-c(V1,V2,V3))
+  
+  run_stats <- rundata %>%
+  group_by(factor(inputsize)) %>% 
+  summarize(meanc = mean(subset(runtime, lang=="c"), na.rm = TRUE), 
+            meanpy = mean(subset(runtime, lang=="python"), na.rm = TRUE),
+            std_dev = sd(runtime, na.rm = TRUE)) %>%
+  mutate(slowdown = meanpy / meanc)
+  
+  print(ggplot(data=rundata,aes(x=factor(inputsize),y=runtime, fill=lang)) +
+     scale_y_log10() +
+     geom_boxplot())
+  
+  return(kable(run_stats))
+  
+}
+
+analyzeRuntimes("./avg.csv")
+analyzeRuntimes("./primes.csv")
+analyzeRuntimes("./pi.csv")
+
+```
