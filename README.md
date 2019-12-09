@@ -6,3 +6,8 @@
 ### Testing methodology
 
 For each of the 3 algorithms, test input sizes of 1000, 10000, and 100000 for 5 runs and average the runtimes. 
+
+### Results
+![Average Algorithm](results/graphs/avg.png)
+![Pi Algorithm](results/graphs/pi.png)
+![Primes Algorithm](results/graphs/primes.png)
