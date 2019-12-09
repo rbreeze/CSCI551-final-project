@@ -8,10 +8,8 @@ import math
 from time import process_time 
 
 comm = MPI.COMM_WORLD
-
-id = comm.Get_rank( )
-
-p = comm.Get_size( )
+id = comm.Get_rank()
+p = comm.Get_size()
 
 # Find the primes between 2 and k. Initialize k.
 k=int(math.sqrt(int(sys.argv[1])))
