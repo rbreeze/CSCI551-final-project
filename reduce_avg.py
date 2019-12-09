@@ -38,7 +38,6 @@ for i in range(num_elements_per_proc):
 
 print("Local sum for process " + str(rank) + " - " + str(local_sum) + ", avg = " + str(local_sum / num_elements_per_proc))
 
-global_sum = 0;
 comm.Reduce(local_sum, global_sum, op=MPI.SUM, root=0)
 
 if (rank == 0): 
