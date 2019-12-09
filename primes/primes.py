@@ -25,6 +25,9 @@ t1_start = process_time()
 if (rank == 0): 
   for i in range(DATA_SIZE-1, 0, -1): 
     send[i] = (i + 1)
+else:
+  recv = None
+  send = None
 
 recv = comm.scatter(send, root=0)
 count = int(DATA_SIZE / size)
