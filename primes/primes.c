@@ -1,5 +1,6 @@
 #include <mpi.h>    // import MPI header
 #include <stdio.h>  // needed for printf
+#include <stdlib.h>
 #include <math.h>   // needed for sqrt
 
 int main(int argc, char *argv[]) {

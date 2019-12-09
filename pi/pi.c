@@ -4,6 +4,7 @@
 // The algorithm is based on Trapezium rule. If f(x)=4*(1-x^2)^(1/2), then PI is the intergral of f(x) from 0 to 1
 
 #include <stdio.h>
+#include <stdlib.h>
 #include<math.h>
 #include <mpi.h>
 
