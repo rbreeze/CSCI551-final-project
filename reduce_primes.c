@@ -2,7 +2,7 @@
 #include <stdio.h>  // needed for printf
 #include <math.h>   // needed for sqrt
 
-#define DATA_SIZE 1024 // let's count the primes among the first 1024 numbers
+#define DATA_SIZE 4000000 // let's count the primes among the first 1024 numbers
 
 int main(int argc, char *argv[]) {
   int send[DATA_SIZE], recv[DATA_SIZE];
