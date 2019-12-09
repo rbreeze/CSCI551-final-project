@@ -20,6 +20,7 @@ DATA_SIZE = int(sys.argv[1])
 send = numpy.zeros(DATA_SIZE, dtype=int)
 recv = numpy.zeros(DATA_SIZE, dtype=int)
 
+comm.Barrier()
 t1_start = process_time() 
 
 if (rank == 0): 
@@ -56,6 +57,9 @@ total = numpy.zeros(1, dtype='float64')
 
 comm.Reduce(res, total, op=MPI.SUM, root=0)
 
+comm.Barrier()
+t1_stop = process_time() 
+
 if(rank == 0): 
-  print("The total number of primes in the first " + str(count*size) + " natural numbers is " + str(recv[0]) + ".")
-  print("Time: " + str(t1_stop-t1_start))
+  print("The total number of primes in the first " + str(count*size) + " natural numbers is " + str(total) + ".")
+  print("Elapsed Time: " + str(t1_stop-t1_start))
