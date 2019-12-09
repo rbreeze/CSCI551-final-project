@@ -45,6 +45,6 @@ int main(int argc, char *argv[]) {
 
   MPI_Finalize(); // shut down MPI
 
-  printf("The process took %d seconds to run.\n", end-start);
+  printf("The process took %f seconds to run.\n", end-start);
   return 0;
 }
