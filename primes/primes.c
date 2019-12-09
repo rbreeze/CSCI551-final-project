@@ -48,7 +48,6 @@ int main(int argc, char *argv[]) {
     }
 
     if (flag == 0) {
-      printf("%d\n", i); 
       res++;
     }
   }
