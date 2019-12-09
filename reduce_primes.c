@@ -41,10 +41,18 @@ int main(int argc, char *argv[]) {
     printf("The total number of primes in the first %d natural numbers is %d.\n", (count*size), recv[0]);
   }
 
+  MPI_Barrier(MPI_COMM_WORLD);
   double end = MPI_Wtime();
+
+  double duration = end-start;
+  double global;
+
+  MPI_Reduce(&duration,&global,1,MPI_DOUBLE,MPI_MAX,0,MPI_COMM_WORLD);
+  if(myrank == 0) {
+    printf("Global runtime is %f\n",global);
+  }
 
   MPI_Finalize(); // shut down MPI
 
-  printf("The process took %f seconds to run.\n", end-start);
   return 0;
 }
