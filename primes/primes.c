@@ -33,12 +33,14 @@ int main(int argc, char *argv[]) {
 
   // each node now processes its share of the numbers
   res = 0; //here: count how many prime numbers are contained in the array
-  for(i = 0; i < count; i++) { //j: test all odd numbers 1<j<sqrt(j)|1
-    for(j = 2; j < i; j++) {
-      if ((recv[i] % j) == 0) { // if a number can be divided by j
-        break; 
-      } else {
-        res++;
+  for(i = 0; i < count; i++) { // for each index in the array
+    if (recv[i] > 1) { 
+      for (j = 2; j < sqrt(recv[i]); j++) { // check factors
+        if ((recv[i] % j) == 0) { // if a number can be divided by j
+          break; 
+        } else {
+          res++;
+        }
       }
     }
   }
