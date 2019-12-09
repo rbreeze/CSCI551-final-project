@@ -1,62 +1,51 @@
-// source: https://github.com/kiwenlau/MPI_PI/blob/master/Trapezoid1/mpi_pi.c
-
-// This program is to caculate PI using MPI
-// The algorithm is based on Trapezium rule. If f(x)=4*(1-x^2)^(1/2), then PI is the intergral of f(x) from 0 to 1
+// Source: https://www.mcs.anl.gov/research/projects/mpi/tutorial/mpiexmpl/src/pi/C/main.html
 
 #include <stdio.h>
 #include <stdlib.h>
-#include<math.h>
+#include <math.h>
 #include <mpi.h>
 
-#define d 1E-7
-#define d2 1E-14
+int main(int argc, char* argv[]) {
 
-int main (int argc, char* argv[])
-{
-    if (argc != 2) {
-        fprintf(stderr, "Usage: pi num_iterations\n");
-        exit(1);
-    }
+  if (argc != 2) {
+      fprintf(stderr, "Usage: pi num_iterations\n");
+      exit(1);
+  }
+  int n = atoi(argv[1]);
 
-    int rank, size, error, i;
-    double pi=0.0, begin=0.0, end=0.0, result=0.0, sum=0.0, x2;
-    int N = atoi(argv[1]);
+  int done = 0, myid, numprocs, i;
+  double mypi, pi, h, sum, x;
+
+  MPI_Init(&argc,&argv);
+  MPI_Comm_size(MPI_COMM_WORLD,&numprocs);
+  MPI_Comm_rank(MPI_COMM_WORLD,&myid);
+
+  MPI_Bcast(&n, 1, MPI_INT, 0, MPI_COMM_WORLD);
+
+  MPI_Barrier(MPI_COMM_WORLD);
+  double begin = MPI_Wtime();
+  
+  h   = 1.0 / (double) n;
+  sum = 0.0;
+  for (i = myid + 1; i <= n; i += numprocs) {
+      x = h * ((double)i - 0.5);
+      sum += 4.0 / (1.0 + x*x);
+  }
+  mypi = h * sum;
     
-    error=MPI_Init (&argc, &argv);
+  MPI_Reduce(&mypi, &pi, 1, MPI_DOUBLE, MPI_SUM, 0,
+       MPI_COMM_WORLD);
+
+  MPI_Barrier(MPI_COMM_WORLD);
+  double end = MPI_Wtime();
     
-    //Get process ID
-    MPI_Comm_rank (MPI_COMM_WORLD, &rank);
-    
-    //Get processes Number
-    MPI_Comm_size (MPI_COMM_WORLD, &size);
-    
-    //Synchronize all processes and get the begin time
-    MPI_Barrier(MPI_COMM_WORLD);
-    begin = MPI_Wtime();
-    
-    //Each process caculates a part of the sum
-    for (i=rank; i<N; i+=size)
-    {
-        x2=d2*i*i;
-        result+=sqrt(1-x2);
-    }
-    
-    //Sum up all results
-    MPI_Reduce(&result, &sum, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
-    
-    //Synchronize all processes and get the end time
-    MPI_Barrier(MPI_COMM_WORLD);
-    end = MPI_Wtime();
-    
-     //Caculate and print PI
-    if (rank==0)
-    {
-        pi=4*d*sum;
-        printf("PI=%lf\n", pi);
-        printf("Elapsed Time: %f\n",  end-begin);
-    }
-    
-    error=MPI_Finalize();
-    
-    return 0;
+  if (myid == 0) {
+    printf("PI=%.16f\n", pi);
+    printf("Elapsed Time: %f\n",  end-begin);
+  }
+
+  MPI_Finalize();
+
+  return 0;
+
 }
