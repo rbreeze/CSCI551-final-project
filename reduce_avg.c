@@ -44,6 +44,8 @@ int main(int argc, char** argv) {
   float *rand_nums = NULL;
   rand_nums = create_rand_nums(num_elements_per_proc);
 
+  double start = MPI_Wtime();
+
   // Sum the numbers locally
   float local_sum = 0;
   int i;
@@ -59,6 +61,17 @@ int main(int argc, char** argv) {
   float global_sum;
   MPI_Reduce(&local_sum, &global_sum, 1, MPI_FLOAT, MPI_SUM, 0,
              MPI_COMM_WORLD);
+
+  MPI_Barrier(MPI_COMM_WORLD);
+  double end = MPI_Wtime();
+
+  double duration = end-start;
+  double global;
+
+  MPI_Reduce(&duration,&global,1,MPI_DOUBLE,MPI_MAX,0,MPI_COMM_WORLD);
+  if(rank == 0) {
+    printf("Global runtime is %f\n",global);
+  }
 
   // Print the result
   if (world_rank == 0) {
