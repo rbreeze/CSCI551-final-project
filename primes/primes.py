@@ -13,7 +13,7 @@ id = comm.Get_rank( )
 p = comm.Get_size( )
 
 # Find the primes between 2 and k. Initialize k.
-k=int(argv[1])
+k=int(sys.argv[1])
 # Define a list S_k of the primes between 2 and k
 S_k=[]
 # Define a list to store numbers that aren't prime between 2 and k.
