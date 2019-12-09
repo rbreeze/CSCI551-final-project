@@ -17,14 +17,16 @@ if size<2:
 
 DATA_SIZE = int(sys.argv[1])
 
-send = numpy.zeros(DATA_SIZE, dtype=int)
+nums = numpy.zeros(DATA_SIZE, dtype=int)
 
 comm.Barrier()
 t1_start = process_time() 
 
 if (rank == 0): 
   for i in range(DATA_SIZE-1, 0, -1): 
-    send[i] = (i + 1)
+    nums[i] = (i + 1)
+  for i, chunk in enumerate(nums):
+      send[i % size].append(chunk)
 else:
   recv = None
   send = None
