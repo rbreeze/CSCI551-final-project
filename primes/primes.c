@@ -1,3 +1,4 @@
+// Source: https://github.com/thomasWeise/distributedComputingExamples/blob/master/mpi/reducePrimes.c
 #include <mpi.h>    // import MPI header
 #include <stdio.h>  // needed for printf
 #include <stdlib.h>
@@ -39,6 +40,8 @@ int main(int argc, char *argv[]) {
         break; } // break inner loop to test next number
     }
   }
+
+  printf("Process %d discovered %d primes in the numbers from %d to %d.\n", rank, res, recv[0], recv[count-1]);
 
   // reduce: each node takes results, applies operator MPI_SUM locally, sends result to root, where MPI_SUM is
   // applied again. (here: locally summing up does not matter, as only 1 number). The final result is returned.
