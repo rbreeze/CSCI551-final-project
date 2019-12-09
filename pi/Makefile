@@ -1,4 +1,4 @@
-MPICC=mpicc
+CC=mpicc
 
 pi/pi: pi/pi.o
 	$(MPICC) pi/pi.o -o pi/pi
