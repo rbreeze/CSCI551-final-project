@@ -30,7 +30,7 @@ comm.scatter(send, recv, count, root=0)
 
 res = count
 for i in range(count, 0, -1):  
-  for in range(int(sqrt(recv[i]))|1, 1, -2): 
+  for j in range(int(math.sqrt(recv[i]))|1, 1, -2): 
     if ((recv[i] % j) == 0):
       res -= 1
       break 
