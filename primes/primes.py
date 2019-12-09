@@ -25,8 +25,9 @@ t1_start = process_time()
 if (rank == 0): 
   for i in range(DATA_SIZE-1, 0, -1): 
     nums[i] = (i + 1)
+  send = [[] for _ in range(size)]
   for i, chunk in enumerate(nums):
-      send[i % size].append(chunk)
+    send[i % size].append(chunk)
 else:
   recv = None
   send = None
