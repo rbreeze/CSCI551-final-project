@@ -31,6 +31,10 @@ local_sum = 0
 global_sum = numpy.zeros(1, dtype='float64')
 
 i = 0
+
+comm.Barrier()
+t1_start = process_time() 
+
 for i in range(num_elements_per_proc): 
   local_sum += rand_nums[i]
 
@@ -40,6 +44,9 @@ local_sum = numpy.sum(numpy.array(local_sum)).astype('float64')
 
 comm.Reduce(local_sum, global_sum, op=MPI.SUM, root=0)
 
+comm.Barrier()
+t1_stop = process_time() 
+
 if (rank == 0): 
   print("Total sum = " + str(global_sum) + ", avg = " + str(global_sum / (size * num_elements_per_proc)))
-
+  print("Elapsed Time: " + str(t1_stop-t1_start))
