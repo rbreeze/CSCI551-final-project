@@ -23,7 +23,7 @@ recv = numpy.zeros(DATA_SIZE, dtype=int)
 t1_start = process_time() 
 
 if (rank == 0): 
-  for i in range(DATA_SIZE, 0, -1): 
+  for i in range(DATA_SIZE-1, 0, -1): 
     send[i] = (i + 1)
 
   comm.scatter(send, recv, root=0)
