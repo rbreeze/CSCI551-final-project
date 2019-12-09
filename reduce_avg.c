@@ -69,7 +69,7 @@ int main(int argc, char** argv) {
   double global;
 
   MPI_Reduce(&duration,&global,1,MPI_DOUBLE,MPI_MAX,0,MPI_COMM_WORLD);
-  if(rank == 0) {
+  if(world_rank == 0) {
     printf("Global runtime is %f\n",global);
   }
 
