@@ -25,9 +25,9 @@ if (rank == 0):
   for i in range(DATA_SIZE, 0, -1): 
     send[i] = (i + 1)
 
-count = (DATA_SIZE / size)
-comm.scatter(send, recv, root=0)
+  comm.scatter(send, recv, root=0)
 
+count = (DATA_SIZE / size)
 res = count
 for i in range(count, 0, -1):  
   for j in range(int(math.sqrt(recv[i]))|1, 1, -2): 
