@@ -1,17 +1,17 @@
 pi/pi: pi/pi.o
-	mpicc pi/pi.o -o pi/pi
+	$(MPICC) pi/pi.o -o pi/pi
 
 pi/pi.o: 
-	mpicc -c pi/pi.c -lm 
+	$(MPICC) -c pi/pi.c -lm 
 
 avg/avg: avg/avg.o
-	mpicc avg/avc.o -o avg/avg
+	$(MPICC) avg/avc.o -o avg/avg
 
 avg/avg.o: 
-	mpicc -c avg/avg.c -lm 
+	$(MPICC) -c avg/avg.c -lm 
 
 primes/primes: primes/primes.o
-	mpicc primes/primes.o -o primes/primes
+	$(MPICC) primes/primes.o -o primes/primes
 
 primes/primes.o: 
-	mpicc -c primes/primes.c -lm 
+	$(MPICC) -c primes/primes.c -lm 
