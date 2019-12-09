@@ -40,7 +40,7 @@ t1_stop = process_time()
 
 print("Process " + str(rank) + " discovered " + str(res) + " primes in the numbers from " + str(recv[0]) + " to " + str(recv[count-1]) + ".")
 
-comm.Reduce(res, recv, op=MPI_SUM, root=0)
+comm.Reduce(res, recv, op=MPI.SUM, root=0)
 
 if(rank == 0): 
   print("The total number of primes in the first " + str(count*size) + " natural numbers is " + str(recv[0]) + ".")
