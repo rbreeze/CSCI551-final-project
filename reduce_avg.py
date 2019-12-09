@@ -18,7 +18,7 @@ if size<2:
 def create_rand_nums(num_elements): 
   rand_nums = []
   for i in range(num_elements):
-    rand_nums.append(randint(0, RAND_MAX))
+    rand_nums.append(randint(0, 100))
   return rand_nums
 
 if (sys.argc != 2): 

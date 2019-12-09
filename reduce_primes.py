@@ -18,18 +18,21 @@ if size<2:
 DATA_SIZE = 2048
 
 send = numpy.zeros(DATA_SIZE, dtype=int)
-recv = numpy.zeros(DATA_SIZE, dtype=int)
 
 t1_start = process_time() 
 
 if (rank == 0): 
   for i in range(DATA_SIZE, 0, -1): 
     send[i] = (i + 1)
+else: 
+  send = None
+  recv = None
 
-  comm.scatter(send, recv, root=0)
+recv = comm.scatter(send, root=0)
 
 count = int(DATA_SIZE / size)
 res = count
+
 for i in range(count, 0, -1):  
   for j in range(int(math.sqrt(recv[i]))|1, 1, -2): 
     if ((recv[i] % j) == 0):
