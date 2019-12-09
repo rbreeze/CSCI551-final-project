@@ -3,6 +3,7 @@
 from mpi4py import MPI
 from random import seed
 from random import randint
+import numpy
 import sys
 
 seed(1)
@@ -29,6 +30,8 @@ num_elements_per_proc = int(sys.argv[1])
 rand_nums = create_rand_nums(num_elements_per_proc)
 
 local_sum = 0
+global_sum = np.zeros(1, dtype='float64')
+
 i = 0
 for i in range(num_elements_per_proc): 
   local_sum += rand_nums[i]
