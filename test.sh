@@ -1,11 +1,10 @@
 iterations=$2
 sizes=$3
 
-for i in {0..$iterations}
+for i in $(seq 0 $iterations)
 do
-  for j in {1..$sizes}
+  for j in $(seq 1 $sizes)
   do
-    cursize=$((10 ** $j))
-    ./comp.sh $1 $cursize
+    ./comp.sh $1 $((10**$j))
   done
 done
