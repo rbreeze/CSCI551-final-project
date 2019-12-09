@@ -29,6 +29,8 @@ for i in range(2, k+1):
             not_prime.append(j)
 
 
+t1_start = process_time() 
+
 # Find the number of primes between k and k**2 by
 # pararllelizing the n-loop.
 b=(k**2-k)/p
@@ -55,6 +57,7 @@ for i in range(0,p):
     totalb = totalb + len(countb)
 total = comm.reduce(totalb,MPI.BOR,0)
 
+t1_stop = process_time() 
 
 if (id == 0):
     print ("Total number of processors: ",p)
@@ -65,3 +68,4 @@ if (id == 0):
     print("The total number of primes found between",2,"and",k*k,"by the n-"
     "loop is:",total+original_num_primes)
 print('')
+print("Elapsed Time: " + str(t1_stop-t1_start))
