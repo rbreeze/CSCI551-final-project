@@ -26,11 +26,9 @@ float *create_rand_nums(int num_elements) {
 
 int main(int argc, char** argv) {
   if (argc != 2) {
-    fprintf(stderr, "Usage: avg num_elements_per_proc\n");
+    fprintf(stderr, "Usage: avg num_elements\n");
     exit(1);
   }
-
-  int num_elements_per_proc = atoi(argv[1]);
 
   MPI_Init(NULL, NULL);
 
@@ -38,6 +36,8 @@ int main(int argc, char** argv) {
   MPI_Comm_rank(MPI_COMM_WORLD, &world_rank);
   int world_size;
   MPI_Comm_size(MPI_COMM_WORLD, &world_size);
+
+  int num_elements_per_proc = (int) atoi(argv[1]) / world_size;
 
   // Create a random array of elements on all processes.
   srand(time(NULL)*world_rank);   // Seed the random number generator to get different results each time for each processor
@@ -68,15 +68,15 @@ int main(int argc, char** argv) {
   double duration = end-start;
   double global;
 
-  MPI_Reduce(&duration,&global,1,MPI_DOUBLE,MPI_MAX,0,MPI_COMM_WORLD);
-  if(world_rank == 0) {
-    printf("Global runtime is %f\n",global);
-  }
-
   // Print the result
   if (world_rank == 0) {
     printf("Total sum = %f, avg = %f\n", global_sum,
            global_sum / (world_size * num_elements_per_proc));
+  }
+
+  MPI_Reduce(&duration,&global,1,MPI_DOUBLE,MPI_MAX,0,MPI_COMM_WORLD);
+  if(world_rank == 0) {
+    printf("Elapsed Time: %f\n",global);
   }
 
   // Clean up
