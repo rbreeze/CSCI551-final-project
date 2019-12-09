@@ -32,7 +32,8 @@ count = int(DATA_SIZE / size)
 res = 0; # here: count how many prime numbers are contained in the array
 low = recv[0]; 
 high = recv[count-1]
-if (low % 2 == 0) low += 1
+if (low % 2 == 0):
+  low += 1
 
 for i in range(low, high, 2):
   flag = 0
