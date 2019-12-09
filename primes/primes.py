@@ -18,22 +18,15 @@ if size<2:
 DATA_SIZE = int(sys.argv[1])
 
 send = numpy.zeros(DATA_SIZE, dtype=int)
-recv = numpy.zeros(DATA_SIZE, dtype=int)
-
-print("A")
 
 comm.Barrier()
 t1_start = process_time() 
-
-print("B")
 
 if (rank == 0): 
   for i in range(DATA_SIZE-1, 0, -1): 
     send[i] = (i + 1)
 
-print("C")
-
-comm.Scatter(send, recv, root=0)
+recv = comm.scatter(send, root=0)
 count = int(DATA_SIZE / size)
 
 res = 0; # here: count how many prime numbers are contained in the array
