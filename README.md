@@ -6,10 +6,12 @@
 ### Testing Scripts
 #### comp.sh
 `usage: ./comp.sh ALGORITHM_NAME N`
+
 Runs both the Python and C implementations of specified algorithm with MPI and saves timing information to `/results/ALGORITHM_NAME.csv`
 
 #### test.sh
 `usage: ./test.sh ITERATIONS SIZES`
+
 Calls the comp.sh script repeatedly with varying sizes. Will run comp.sh `ITERATIONS` number of times with for each input size, and will run input sizes from `10^1` to `10^SIZES`.
 
 ### Testing methodology
