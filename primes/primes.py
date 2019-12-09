@@ -13,7 +13,7 @@ id = comm.Get_rank( )
 p = comm.Get_size( )
 
 # Find the primes between 2 and k. Initialize k.
-k=2000
+k=int(argv[1])
 # Define a list S_k of the primes between 2 and k
 S_k=[]
 # Define a list to store numbers that aren't prime between 2 and k.
@@ -62,7 +62,5 @@ comm.Barrier()
 t1_stop = process_time() 
 
 if (id == 0):
-    print("The total number of primes found between",2,"and",k*k,"by the n-"
-    "loop is:",total+original_num_primes)
-    print('')
+    print("Primes found between",2,"and",k*k,"is:",total+original_num_primes)
     print("Elapsed Time: " + str(t1_stop-t1_start))

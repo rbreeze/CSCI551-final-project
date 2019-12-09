@@ -2,9 +2,15 @@
 #include <stdio.h>  // needed for printf
 #include <math.h>   // needed for sqrt
 
-#define DATA_SIZE 4000000 // let's count the primes among the first 1024 numbers
-
 int main(int argc, char *argv[]) {
+
+  if (argc != 2) {
+      fprintf(stderr, "Usage: primes max\n");
+      exit(1);
+  }
+
+  int DATA_SIZE = atoi(argv[1]);
+
   int send[DATA_SIZE], recv[DATA_SIZE];
   int rank, size, count, root, res, i, j;
   MPI_Status status;
@@ -32,13 +38,12 @@ int main(int argc, char *argv[]) {
         break; } // break inner loop to test next number
     }
   }
-  printf("Process %d discovered %d primes in the numbers from %d to %d.\n", rank, res, recv[0], recv[count-1]);
 
   // reduce: each node takes results, applies operator MPI_SUM locally, sends result to root, where MPI_SUM is
   // applied again. (here: locally summing up does not matter, as only 1 number). The final result is returned.
   MPI_Reduce(&res, recv, 1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
   if(rank == 0) { //if root, print
-    printf("The total number of primes in the first %d natural numbers is %d.\n", (count*size), recv[0]);
+    printf("Primes in the first %d natural numbers is %d.\n", (count*size), recv[0]);
   }
 
   MPI_Barrier(MPI_COMM_WORLD);
@@ -49,7 +54,7 @@ int main(int argc, char *argv[]) {
 
   MPI_Reduce(&duration,&global,1,MPI_DOUBLE,MPI_MAX,0,MPI_COMM_WORLD);
   if(rank == 0) {
-    printf("Global runtime is %f\n",global);
+    printf("Elapsed Time: %f\n",global);
   }
 
   MPI_Finalize(); // shut down MPI
