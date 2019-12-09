@@ -34,15 +34,18 @@ int main(int argc, char *argv[]) {
   // each node now processes its share of the numbers
   res = 0; //here: count how many prime numbers are contained in the array
   for(i = 0; i < count; i++) { // for each index in the array
-    if (recv[i] > 1) { 
-      for (j = 2; j < sqrt(recv[i]); j++) { // check factors
-        if ((recv[i] % j) == 0) { // if a number can be divided by j
+    int num = recv[i];
+    int prime = 0; 
+    if (num > 1) { 
+      for (j = 2; j < sqrt(num); j++) { // check factors
+        if (num % j == 0) { // if a number can be divided by j
           break; 
         } else {
-          res++;
+          prime = 1;
         }
       }
     }
+    if (prime) res++;
   }
 
   printf("Process %d discovered %d primes in the numbers from %d to %d.\n", rank, res, recv[0], recv[count-1]);
