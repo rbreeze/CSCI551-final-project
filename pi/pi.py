@@ -41,8 +41,7 @@ comm.Barrier()
 t1_start = process_time() 
 
 comm.Bcast([n, MPI.INT], root=0)
-if n == 0:
-    break
+
 _mypi = comp_pi(n, myrank, nprocs)
 mypi.fill(_mypi)
 comm.Reduce([mypi, MPI.DOUBLE], [pi, MPI.DOUBLE],
