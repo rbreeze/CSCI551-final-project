@@ -15,7 +15,7 @@ if size<2:
   print("Need more than 1 process")
   quit()
 
-DATA_SIZE = 2048
+DATA_SIZE = sys.argv[1]
 
 send = numpy.zeros(DATA_SIZE, dtype=int)
 recv = numpy.zeros(DATA_SIZE, dtype=int)
