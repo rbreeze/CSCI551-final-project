@@ -33,19 +33,21 @@ int main(int argc, char *argv[]) {
 
   // each node now processes its share of the numbers
   res = 0; //here: count how many prime numbers are contained in the array
-  for(i = 0; i < count; i++) { // for each index in the array
-    int num = recv[i];
-    int prime = 0; 
-    if (num > 1) { 
-      for (j = 2; j < sqrt(num); j++) { // check factors
-        if (num % j == 0) { // if a number can be divided by j
-          break; 
-        } else {
-          prime = 1;
-        }
-      }
+  int low = recv[0]; 
+  int high = recv[count-1];
+  if (low % 2 == 0) low++;
+  for(i = low; i < high; i+=2) { // for each index in the array
+
+    int flag = 0; 
+
+    for (j = 2; j <= i / 2; j++) { 
+      if (i % j == 0) { // if a number can be divided by j
+        flag = 1; 
+        break; 
+      } 
     }
-    if (prime) {
+
+    if (flag == 0) {
       printf("%d\n", num); 
       res++;
     }
