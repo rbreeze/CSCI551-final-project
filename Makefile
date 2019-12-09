@@ -1,5 +1,7 @@
 CC=mpicc
 
+all: pi/pi avg/avg primes/primes
+
 pi/pi:
 	$(CC) pi/pi.c -o pi/pi -lm
 
