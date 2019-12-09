@@ -5,6 +5,7 @@ from random import seed
 from random import randint
 import numpy
 import sys
+from time import process_time 
 
 comm = MPI.COMM_WORLD
 size = comm.Get_size()
