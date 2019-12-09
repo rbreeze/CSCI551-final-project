@@ -1,10 +1,10 @@
 CC=mpicc
 
-pi/pi: pi/pi.o
-	$(MPICC) pi/pi.o -o pi/pi
-
 pi/pi.o: 
 	$(MPICC) -c pi/pi.c -lm 
+
+pi/pi: pi/pi.o
+	$(MPICC) pi/pi.o -o pi/pi
 
 avg/avg: avg/avg.o
 	$(MPICC) avg/avc.o -o avg/avg
