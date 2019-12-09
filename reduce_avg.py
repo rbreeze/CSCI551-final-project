@@ -21,7 +21,7 @@ def create_rand_nums(num_elements):
     rand_nums.append(randint(0, 100))
   return rand_nums
 
-if (sys.argc != 2): 
+if (len(sys.argv) != 2): 
   print("Usage: avg num_elements_per_proc\n")
 
 num_elements_per_proc = atoi(sys.argv[1])
