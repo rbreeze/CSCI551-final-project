@@ -17,6 +17,8 @@ int main(int argc, char *argv[]) {
     for(i = DATA_SIZE; (--i)>=0; ) { send[i] = (i + 1); }
   }
 
+  double start = MPI_Wtime();
+
   count = (DATA_SIZE / size); // divide the data among _all_ processes
   // scatter: if rank=0, send data (and get own share); otherwise: receive data
   MPI_Scatter(send, count, MPI_INT, recv, count, MPI_INT, 0, MPI_COMM_WORLD);
@@ -39,6 +41,10 @@ int main(int argc, char *argv[]) {
     printf("The total number of primes in the first %d natural numbers is %d.\n", (count*size), recv[0]);
   }
 
+  double end = MPI_Wtime();
+
   MPI_Finalize(); // shut down MPI
+
+  printf("The process took %d seconds to run.\n", end-start);
   return 0;
 }
