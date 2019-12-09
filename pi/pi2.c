@@ -1,5 +1,9 @@
-#include "mpi.h"
+// Source: https://www.mcs.anl.gov/research/projects/mpi/tutorial/mpiexmpl/src/pi/C/main.html
+
+#include <stdio.h>
+#include <stdlib.h>
 #include <math.h>
+#include <mpi.h>
 
 int main(argc,argv)
 int argc;
@@ -21,7 +25,7 @@ char *argv[];
     MPI_Bcast(&n, 1, MPI_INT, 0, MPI_COMM_WORLD);
 
     MPI_Barrier(MPI_COMM_WORLD);
-    begin = MPI_Wtime();
+    double begin = MPI_Wtime();
     
     h   = 1.0 / (double) n;
     sum = 0.0;
@@ -35,7 +39,7 @@ char *argv[];
          MPI_COMM_WORLD);
 
     MPI_Barrier(MPI_COMM_WORLD);
-    end = MPI_Wtime();
+    double end = MPI_Wtime();
       
     if (myid == 0)
       printf("PI=approximately %.16f\n",
