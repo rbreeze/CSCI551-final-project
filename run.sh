@@ -2,7 +2,7 @@ A=1000
 B=10000
 C=100000
 
-./runComp $1 $A
-./runComp $2 $B
-./runComp $3 $C
+./runComp.sh $1 $A
+./runComp.sh $1 $B
+./runComp.sh $1 $C
 
