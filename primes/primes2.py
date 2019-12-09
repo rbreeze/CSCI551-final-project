@@ -29,13 +29,21 @@ if (rank == 0):
 comm.Scatter(send, recv, root=0)
 count = int(DATA_SIZE / size)
 
-res = count
+res = 0; # here: count how many prime numbers are contained in the array
+low = recv[0]; 
+high = recv[count-1]
+if (low % 2 == 0) low += 1
 
-for i in range(count, 0, -1):  
-  for j in range(int(math.sqrt(recv[i]))|1, 1, -2): 
-    if ((recv[i] % j) == 0):
-      res -= 1
-      break 
+for i in range(low, high, 2):
+  flag = 0
+
+  for j in range(2, i/2):
+    if (i % j == 0):
+      flag = 1
+      break
+
+  if (flag == 0): 
+    res++
 
 t1_stop = process_time() 
 
